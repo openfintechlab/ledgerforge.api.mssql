@@ -1,0 +1,25 @@
+quarkus:
+  application:
+    name: "ledgerforge"
+
+  http:
+    port: 8081
+    root-path: '/v1/ledgerforge'
+  log:
+    level: INFO
+    console:
+      enabled: true
+      color: true
+      time-stamps: true
+      level: INFO
+      json: false
+      
+    # category:
+    #   "io.quarkus.category":
+    #     level: INFO
+    #     console:
+    #       enabled: true
+    #       color: true
+    #       time-stamps: true
+    #       level: INFO
+    #       json: true
