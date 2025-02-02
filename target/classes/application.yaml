@@ -3,7 +3,7 @@ quarkus:
     name: "ledgerforge"
 
   http:
-    port: 8081
+    port: 8080
     root-path: '/v1/ledgerforge'
   log:
     level: INFO

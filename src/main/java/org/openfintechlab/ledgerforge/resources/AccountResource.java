@@ -15,9 +15,12 @@
  *
  * Author: Muhammad Furqan
  * Created: 31-JAN-2025
- * Description: API resoruce for `account` resource
+ * Description: 
+ * API resoruce for `account` resource
+ * Reference:
+ * 
  */
-package org.openfintechlab.resources;
+package org.openfintechlab.ledgerforge.resources;
 
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;

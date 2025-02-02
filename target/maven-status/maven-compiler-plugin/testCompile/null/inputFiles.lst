@@ -1,2 +1,2 @@
-/home/furqan/source/ledgerforge.api.mssql/src/test/java/org/openfintechlab/ExampleResoruceIT.java
-/home/furqan/source/ledgerforge.api.mssql/src/test/java/org/openfintechlab/ExampleResoruceTest.java
+/home/furqan/source/ledgerforge.api.mssql/src/test/java/org/openfintechlab/ledgerforge/test/AccountResourceIT.java
+/home/furqan/source/ledgerforge.api.mssql/src/test/java/org/openfintechlab/ledgerforge/test/AccountResourceTest.java
