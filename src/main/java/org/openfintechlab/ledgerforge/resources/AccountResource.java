@@ -30,8 +30,11 @@ import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
+import java.net.http.HttpHeaders;
 
 import org.jboss.logging.Logger;
 
@@ -47,7 +50,12 @@ public class AccountResource {
      * @return List of accounts
      */
     @GET
-    public Response getAllAccountsDefinedInTheLedger() {
+    public Response getAllAccountsDefinedInTheLedger(@Context HttpHeaders headers) {
+        // TODO: `GET /account` Add logic to validate the http header components
+        // TODO: `GET /account` Add exception handling mechanisim so that meaningful message can be returned to the user
+        // TODO: `GET /account` Create a Business object for account definition
+        // TODO: `GET /account` Add logic to retrieve accounts from the database
+
         LOGGER.info("Getting all accounts defined in the ledger");
         return Response.status(Response.Status.NOT_IMPLEMENTED).build();
     }

@@ -7,12 +7,9 @@ quarkus:
     root-path: '/v1/ledgerforge'
   log:
     level: INFO
-    console:
-      enabled: true
-      color: true
-      time-stamps: true
+    console:      
+      color: true      
       level: INFO
-      json: false
       
     # category:
     #   "io.quarkus.category":
