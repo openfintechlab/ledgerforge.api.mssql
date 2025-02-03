@@ -17,16 +17,18 @@
  * Created: 31-JAN-2025
  * Description: 
  * Common route Filter class which will be triggered when ANY route is called.
- * This class will be used to validate the request headers.
+ * This class will be used to validate the request headers
  * Reference:
  * - https://github.com/openfintechlab/ledgerforge.api.mssql/wiki/Message-Structure
  */
 package org.openfintechlab.ledgerforge.filters;
 
 import java.io.IOException;
-import java.net.http.HttpHeaders;
+import java.time.LocalDateTime;
 
 import org.jboss.logging.Logger;
+import org.openfintechlab.ledgerforge.entities.Metadata;
+
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.ext.Provider;
@@ -62,12 +64,17 @@ public class CommonRoutefilter implements ContainerRequestFilter {
         LOGGER.info(strResponseDescription);
         LOGGER.debug("Signature: " + xSignature);  
         LOGGER.debug("Authorization Token: " + xAuth);  
+        requestContext.getHeaders().add("X-Reply-Timestamp", LocalDateTime.now().toString());
         if(xAuth == null || xMessageID == null ) {
-            LOGGER.error("One or more required headers are missing. Returning 400 Bad Request");
-            // TODO: Return a JSON message with required error code
-            requestContext.abortWith(Response.status((xAuth == null) ? Response.Status.FORBIDDEN:Response.Status.BAD_REQUEST).entity("One or more required headers are missing").build());
+            LOGGER.error(String.format("One or more required headers are missing. Returning %s Bad Request", (xAuth == null) ? "403 Forbidden":"400 Bad Request"));
+            Metadata metadata = new Metadata("8400", "One or more required headers are missing. Returning 400 Bad Request", LocalDateTime.now());
+            requestContext.getHeaders().add("X-Response-Code", "8400");
+            requestContext.abortWith(Response.status((xAuth == null) ? Response.Status.FORBIDDEN : Response.Status.BAD_REQUEST)
+                                        .entity(metadata)
+                                        .header("X-Reply-Timestamp", LocalDateTime.now().toString())
+                                        .header("X-Response-Code", "8400")
+                                        .build());
         }
         // Sterp#2: Authenticate the request token
-
     }
 }
