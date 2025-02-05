@@ -25,21 +25,35 @@ package org.openfintechlab.ledgerforge.filters;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Map;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logging.Logger;
 import org.openfintechlab.ledgerforge.entities.Metadata;
 
+import jakarta.inject.Inject;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.ext.Provider;
 import jakarta.ws.rs.core.Response;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 
 
 @Provider
 public class CommonRoutefilter implements ContainerRequestFilter {
         
-    private static final Logger LOGGER = Logger.getLogger(CommonRoutefilter.class);
+    private static final Logger LOGGER = Logger.getLogger(CommonRoutefilter.class);    
+    private static JsonNode statusMappingRoot = null;
+
+    @Inject
+    @ConfigProperty(name = "appconfig.statusMappingJSON")
+    String statusMappingJSON;
+
+
+
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
@@ -51,6 +65,7 @@ public class CommonRoutefilter implements ContainerRequestFilter {
         String xChannelID   =  requestContext.getHeaders().getFirst("X-Channel-ID");
         String xSignature   = requestContext.getHeaders().getFirst("X-Signature");
         String xClientIdURI = requestContext.getHeaders().getFirst("X-Client-Identifier-URI");
+        String acceptLang   = requestContext.getHeaders().getFirst("Accept-Language");
 
         // Step#1: Parsing the extracted headers and verifying if the required information is correct
         String strResponseDescription = String.format("Authorization Token Received: %b; MessageID: %s; Coreleation ID: %s; " +
@@ -66,15 +81,34 @@ public class CommonRoutefilter implements ContainerRequestFilter {
         LOGGER.debug("Authorization Token: " + xAuth);  
         requestContext.getHeaders().add("X-Reply-Timestamp", LocalDateTime.now().toString());
         if(xAuth == null || xMessageID == null ) {
-            LOGGER.error(String.format("One or more required headers are missing. Returning %s Bad Request", (xAuth == null) ? "403 Forbidden":"400 Bad Request"));
-            Metadata metadata = new Metadata("8400", "One or more required headers are missing. Returning 400 Bad Request", LocalDateTime.now());
-            requestContext.getHeaders().add("X-Response-Code", "8400");
+            LOGGER.error(String.format("Authorization header token missing. Returning %s Bad Request", (xAuth == null) ? "403 Forbidden":"400 Bad Request"));
+            Map<String,String> statusMapping = parseJsonToMapString("NO_AUTH_HEADER");
+            String errorCode    = statusMapping.get("code");
+            String enDescString = statusMapping.get("EN");
+            String arDescString = statusMapping.get("AR");
+            String desc         = (acceptLang != null && acceptLang.toUpperCase().equalsIgnoreCase("AR")) ? arDescString : enDescString;
+            
+            Metadata metadata = new Metadata(errorCode, desc, LocalDateTime.now());            
+            requestContext.getHeaders().add("X-Response-Code", errorCode);
             requestContext.abortWith(Response.status((xAuth == null) ? Response.Status.FORBIDDEN : Response.Status.BAD_REQUEST)
                                         .entity(metadata)
                                         .header("X-Reply-Timestamp", LocalDateTime.now().toString())
-                                        .header("X-Response-Code", "8400")
+                                        .header("X-Response-Code", errorCode)
                                         .build());
         }
         // Sterp#2: Authenticate the request token
+    }
+
+ 
+
+    private Map<String, String> parseJsonToMapString(String key) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        if (statusMappingRoot == null){
+            statusMappingRoot = mapper.readTree(statusMappingJSON);
+        }        
+        String enDescription = statusMappingRoot.get(key).get("EN").asText();
+        String arDescription = statusMappingRoot.get(key).get("AR").asText();
+        String code = statusMappingRoot.get(key).get("code").asText();
+        return Map.of("EN", enDescription, "AR", arDescription, "code", code);        
     }
 }

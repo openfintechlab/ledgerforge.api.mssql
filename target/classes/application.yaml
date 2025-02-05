@@ -11,12 +11,6 @@ quarkus:
       color: true      
       level: INFO
       
-    # category:
-    #   "io.quarkus.category":
-    #     level: INFO
-    #     console:
-    #       enabled: true
-    #       color: true
-    #       time-stamps: true
-    #       level: INFO
-    #       json: true
+appconfig:
+  statusMappingJSON: '{"NO_AUTH_HEADER":{"code":"9100","EN":"Authentication Failure","AR":"فشل المصادقة"}}'
+  
