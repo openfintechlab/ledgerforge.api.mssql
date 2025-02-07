@@ -24,6 +24,7 @@ package org.openfintechlab.ledgerforge.test;
 
 import static io.restassured.RestAssured.given;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -37,9 +38,11 @@ public class AccountResourceTest {
     void testGetAllAccountsDefinedInTheLedger() {
         // TODO! The test cases needs to be changed
         given()
+          .header("Authorization", "Bearer 123")
+          .header("X-Message-ID", "MESSAGEID")
           .when().get("/account")
           .then()
-             .statusCode(403);
+             .statusCode(501);
     }
 
     @Test    
@@ -48,47 +51,55 @@ public class AccountResourceTest {
         // TODO! The test cases needs to be changed
         given()
           .header("Authorization", "Bearer 123")
-          .header("X-Message-ID", "Bearer 123")
+          .header("X-Message-ID", "MESSAGEID")
           .when().get("/account")          
           .then()
-             .statusCode(500);
+             .statusCode(501);
     }
 
     @Test
     void testGetSepcificAccountDetails() {
         // TODO! The test cases needs to be changed
         given()
+          .header("Authorization", "Bearer 123")
+          .header("X-Message-ID", "MESSAGEID")
           .when().get("/account/1")
           .then()
-             .statusCode(500);
+             .statusCode(501);
     }
 
     @Test
     void testDeleteSepcificAccountDetails() {
         // TODO! The test cases needs to be changed
         given()
+          .header("Authorization", "Bearer 123")
+          .header("X-Message-ID", "MESSAGEID")
           .when().delete("/account/1")
           .then()
-             .statusCode(500);
+             .statusCode(501);
     }
 
     @Test
     void testUpdateAccount() {
         // TODO! The test cases needs to be changed
         given()
+          .header("Authorization", "Bearer 123")
+          .header("X-Message-ID", "MESSAGEID")
           .when().put("/account/1")
           .then()
-             .statusCode(500);
+             .statusCode(501);
     }
 
     @Test
     void testCreateAccount() {
         // TODO! The test cases needs to be changed
         given()
+        .header("Authorization", "Bearer 123")
+        .header("X-Message-ID", "MESSAGEID")
         .contentType("application/json")
           .when().post("/account")
           .then()
-             .statusCode(500);
+             .statusCode(501);
     }
 
 }

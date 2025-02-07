@@ -30,11 +30,8 @@ import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
-import java.net.http.HttpHeaders;
 
 import org.jboss.logging.Logger;
 
@@ -49,8 +46,8 @@ public class AccountResource {
      * This method returns all the accounts defined in the ledger
      * @return List of accounts
      */
-    @GET
-    public Response getAllAccountsDefinedInTheLedger(@Context HttpHeaders headers) {
+    @GET    
+    public Response getAllAccountsDefinedInTheLedger() {
         // TODO: `GET /account` Add logic to validate the http header components
         // TODO: `GET /account` Add exception handling mechanisim so that meaningful message can be returned to the user
         // TODO: `GET /account` Create a Business object for account definition

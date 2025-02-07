@@ -100,6 +100,8 @@ public class CommonRoutefilter implements ContainerRequestFilter {
         }
         // Sterp#2: Authenticate the request token
         // TODO: Add logic to authenticate the request token
+
+        LOGGER.info("Request headers are validated successfully");
     }
 
  
