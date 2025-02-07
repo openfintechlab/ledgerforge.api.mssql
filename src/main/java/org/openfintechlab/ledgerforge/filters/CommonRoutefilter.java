@@ -36,6 +36,8 @@ import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.ext.Provider;
 import jakarta.ws.rs.core.Response;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -97,18 +99,28 @@ public class CommonRoutefilter implements ContainerRequestFilter {
                                         .build());
         }
         // Sterp#2: Authenticate the request token
+        // TODO: Add logic to authenticate the request token
     }
 
  
 
     private Map<String, String> parseJsonToMapString(String key) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        if (statusMappingRoot == null){
-            statusMappingRoot = mapper.readTree(statusMappingJSON);
-        }        
-        String enDescription = statusMappingRoot.get(key).get("EN").asText();
-        String arDescription = statusMappingRoot.get(key).get("AR").asText();
-        String code = statusMappingRoot.get(key).get("code").asText();
-        return Map.of("EN", enDescription, "AR", arDescription, "code", code);        
+        try{
+            if (statusMappingRoot == null){
+                statusMappingRoot = mapper.readTree(statusMappingJSON);
+            }        
+            String enDescription = statusMappingRoot.get(key).get("EN").asText();
+            String arDescription = statusMappingRoot.get(key).get("AR").asText();
+            String code = statusMappingRoot.get(key).get("code").asText();
+            return Map.of("EN", enDescription, "AR", arDescription, "code", code);        
+
+        }catch (JsonProcessingException e) {
+            LOGGER.error("Unable to parse status mapping JSON. Invalid JSON: " + e.getMessage());
+            LOGGER.error("Exiting the program. Can not continue without the status mapping");
+            // ! Exit the program. Can not continue without the status mapping
+            System.exit(99);
+        }
+        return null;
     }
 }

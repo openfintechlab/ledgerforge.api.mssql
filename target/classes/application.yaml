@@ -12,5 +12,6 @@ quarkus:
       level: INFO
       
 appconfig:
-  statusMappingJSON: '{"NO_AUTH_HEADER":{"code":"9100","EN":"Authentication Failure","AR":"فشل المصادقة"}}'
+  statusMappingJSON: 'adasdasdasd'
+  statusMappingJSON1: '{"NO_AUTH_HEADER":{"code":"9100","EN":"Authentication Failure","AR":"فشل المصادقة"}}'
   

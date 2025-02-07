@@ -26,15 +26,10 @@ package org.openfintechlab.ledgerforge.entities;
 
 import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Metadata {
     
     @JsonProperty("status")
@@ -46,6 +41,10 @@ public class Metadata {
     @JsonProperty("responseTime")
     private LocalDateTime       responseTimeStamp = LocalDateTime.now();
 
-
+    public Metadata(String statusCode, String statusDescription, LocalDateTime responseTimeStamp) {
+        this.statusCode         = statusCode;
+        this.statusDescription  = statusDescription;
+        this.responseTimeStamp  = responseTimeStamp == null ? LocalDateTime.now(): responseTimeStamp;
+    }
 
 }

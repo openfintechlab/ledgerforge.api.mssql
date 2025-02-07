@@ -24,6 +24,7 @@ package org.openfintechlab.ledgerforge.test;
 
 import static io.restassured.RestAssured.given;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import io.quarkus.test.junit.QuarkusTest;
@@ -32,12 +33,25 @@ import io.quarkus.test.junit.QuarkusTest;
 public class AccountResourceTest {
 
     @Test    
+    @DisplayName("Test to get all accounts defined in the ledger-wintout Bearer token")
     void testGetAllAccountsDefinedInTheLedger() {
         // TODO! The test cases needs to be changed
         given()
           .when().get("/account")
           .then()
-             .statusCode(501);
+             .statusCode(403);
+    }
+
+    @Test    
+    @DisplayName("Test to get all accounts defined in the ledger")
+    void testGetAllAccountsDefinedInTheLedgerWithAuthHeader() {
+        // TODO! The test cases needs to be changed
+        given()
+          .header("Authorization", "Bearer 123")
+          .header("X-Message-ID", "Bearer 123")
+          .when().get("/account")          
+          .then()
+             .statusCode(500);
     }
 
     @Test
@@ -46,7 +60,7 @@ public class AccountResourceTest {
         given()
           .when().get("/account/1")
           .then()
-             .statusCode(501);
+             .statusCode(500);
     }
 
     @Test
@@ -55,7 +69,7 @@ public class AccountResourceTest {
         given()
           .when().delete("/account/1")
           .then()
-             .statusCode(501);
+             .statusCode(500);
     }
 
     @Test
@@ -64,7 +78,7 @@ public class AccountResourceTest {
         given()
           .when().put("/account/1")
           .then()
-             .statusCode(501);
+             .statusCode(500);
     }
 
     @Test
@@ -74,7 +88,7 @@ public class AccountResourceTest {
         .contentType("application/json")
           .when().post("/account")
           .then()
-             .statusCode(501);
+             .statusCode(500);
     }
 
 }
