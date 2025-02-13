@@ -22,6 +22,7 @@
  */
 package org.openfintechlab.ledgerforge.resources;
 
+import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -34,6 +35,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import org.jboss.logging.Logger;
+import org.openfintechlab.ledgerforge.entities.Account;
 
 @Path("/account")
 @Produces(MediaType.APPLICATION_JSON)
@@ -83,14 +85,15 @@ public class AccountResource {
     }
 
     @POST
-    public Response createAccount() {
-        LOGGER.info("Creating account");
+    public Response createAccount(@Valid Account account) {
+        LOGGER.info("Creating account");        
+        
         return Response.status(Response.Status.NOT_IMPLEMENTED).build();
     }
     
     @PUT
     @Path("/{accountId}")
-    public Response updateAccount( @PathParam("accountId") String accountId) {
+    public Response updateAccount( @PathParam("accountId") String accountId, @Valid Account account) {
         LOGGER.info("Updating account with ID: "+ accountId);
         return Response.status(Response.Status.NOT_IMPLEMENTED).build();
     }

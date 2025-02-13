@@ -1,4 +1,5 @@
 /home/furqan/source/ledgerforge.api.mssql/src/main/java/org/openfintechlab/ledgerforge/entities/AppConfigEntity.java
 /home/furqan/source/ledgerforge.api.mssql/src/main/java/org/openfintechlab/ledgerforge/entities/Metadata.java
+/home/furqan/source/ledgerforge.api.mssql/src/main/java/org/openfintechlab/ledgerforge/entities/dto/AccountDTO.java
 /home/furqan/source/ledgerforge.api.mssql/src/main/java/org/openfintechlab/ledgerforge/filters/CommonRoutefilter.java
 /home/furqan/source/ledgerforge.api.mssql/src/main/java/org/openfintechlab/ledgerforge/resources/AccountResource.java

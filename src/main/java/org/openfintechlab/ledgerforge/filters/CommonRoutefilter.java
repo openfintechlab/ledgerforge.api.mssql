@@ -83,8 +83,12 @@ public class CommonRoutefilter implements ContainerRequestFilter {
         LOGGER.debug("Authorization Token: " + xAuth);  
         requestContext.getHeaders().add("X-Reply-Timestamp", LocalDateTime.now().toString());
         if(xAuth == null || xMessageID == null ) {
-            LOGGER.error(String.format("Authorization header token missing. Returning %s Bad Request", (xAuth == null) ? "403 Forbidden":"400 Bad Request"));
-            Map<String,String> statusMapping = parseJsonToMapString("NO_AUTH_HEADER");
+            if(xAuth == null){
+                LOGGER.error(String.format("Authorization header token missing. Returning %s Bad Request", "403 Forbidden"));
+            }else if(xMessageID == null){
+                LOGGER.error(String.format("Message ID missing. Returning %s Bad Request","400 Bad Request"));
+            }
+            Map<String,String> statusMapping = parseJsonToMapString(xAuth == null? "NO_AUTH_HEADER" : "NO_MSSG_ID");
             String errorCode    = statusMapping.get("code");
             String enDescString = statusMapping.get("EN");
             String arDescString = statusMapping.get("AR");

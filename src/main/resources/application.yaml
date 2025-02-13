@@ -4,6 +4,7 @@ quarkus:
 
   http:
     port: 8080
+    host: 0.0.0.0
     root-path: '/v1/ledgerforge'
   log:
     level: INFO
@@ -12,5 +13,5 @@ quarkus:
       level: INFO
       
 appconfig:  
-  statusMappingJSON: '{"NO_AUTH_HEADER":{"code":"9100","EN":"Authentication Failure","AR":"فشل المصادقة"}}'
+  statusMappingJSON: '{"NO_AUTH_HEADER":{"code":"9100","EN":"Authentication Failure","AR":"فشل المصادقة"},"NO_MSSG_ID":{"code":"9101","EN":"Required Input Missing: Message ID","AR":"فشلإدخال المطلوب مفقود: معرف الرسالة"}}'
   
