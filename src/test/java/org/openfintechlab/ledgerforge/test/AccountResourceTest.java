@@ -82,9 +82,9 @@ public class AccountResourceTest {
         given()
           .header("Authorization", "Bearer 123")
           .header("X-Message-ID", "MESSAGEID")
-          .when().put("/account/1")
+          .when().put("/account/1234567")
           .then()
-             .statusCode(501);
+             .statusCode(200);
     }
 
     @Test
@@ -96,7 +96,7 @@ public class AccountResourceTest {
         .contentType("application/json")
           .when().post("/account")
           .then()
-             .statusCode(501);
+             .statusCode(200);
     }
 
 }

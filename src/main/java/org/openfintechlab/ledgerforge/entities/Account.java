@@ -22,42 +22,62 @@
  */
 package org.openfintechlab.ledgerforge.entities;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
+import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "LEDFOR_ACCOUNT")
+public class Account extends PanacheEntityBase {
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Account {
-    
-    
-    @NotBlank(message = "Instrument Number is mandatory")
-    @Size(min=10, max=46, message="Instrument Number should be set")    
-    @JsonProperty("instrunmentNumber")
-    private String instrunmentNumber;    
-    
-    @NotBlank(message = "Instrument Type is mandatory")
-    @Pattern(regexp = "ACCOUNT|CREDIT_CARD|DEBIT_CARD|PREPAID_CARD|CARD", message = "Instrument Type should be according to defined values")
-    // @JsonProperty("instrunmentType")
-    private String instrunmentType;
+    @Id
+    @Column(name = "instrumentID", nullable = false)        
+    public String instrumentID;
 
-    // private String instrumentToken;
-    // private String instrumentStandNumber;
-    // private String providerId;
-    // private String linkedTo;
-    // private String insturnmentHash;
-    // private String personID;
-    // private String personType;
-    // private String currencyCodeISO;
-    // private String status;
-    // private String recordHash;
-    // private String createdOn;
-    // private String updatedOn;
+    @Column(name = "instrunmentToken")
+    public String instrunmentToken;
+
+    @Column(name = "instrumentNumber")
+    public String instrunmentNumber;
+
+    @Column(name = "instrumentType")
+    public String instrumentType;
+
+    @Column(name = "instrumentStandNumber")
+    public String instrumentStandNumber;
+
+    @Column(name = "providerId")
+    public String providerId;
+
+    @Column(name = "linkedTo")
+    public String linkedTo;
+
+    @Column(name = "instrumentHash")
+    public String instrumentHash;
+
+    @Column(name = "personID")
+    public String personID;
+
+    @Column(name = "personType")
+    public String personType;
+
+    @Column(name = "currency_code_iso")
+    public String currencyCodeIso;
+
+    @Column(name = "status")
+    public String status;
+
+    @Column(name = "recordHash")
+    public String recordHash;
+
+    @Column(name = "createdon")
+    public LocalDateTime createdon;
+
+    @Column(name = "updatedon")
+    public LocalDateTime updatedon;
 }
+

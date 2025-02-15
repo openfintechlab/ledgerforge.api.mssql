@@ -27,6 +27,8 @@ package org.openfintechlab.ledgerforge.services;
 import java.util.Map;
 
 import org.eclipse.microprofile.config.ConfigProvider;
+import org.jboss.logging.Logger;
+import org.openfintechlab.ledgerforge.resources.AccountResource;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -42,6 +44,8 @@ public class ResponseCodeMappingService {
 
     private JsonNode statusMappingRoot = null;
     private String statusMappingJSONString = null;
+
+    private static final Logger LOGGER = Logger.getLogger(AccountResource.class);
     
     /**
      * This method returns the status mapping for the given key by loading the JSON translation
@@ -54,21 +58,19 @@ public class ResponseCodeMappingService {
         if(statusMappingRoot == null) {
             statusMappingJSONString = ConfigProvider.getConfig().getValue("appconfig.statusMappingJSON", String.class);
             ObjectMapper mapper = new ObjectMapper();
-            try {
-                if (statusMappingRoot == null ){
-                    statusMappingRoot = mapper.readTree(statusMappingJSONString);
-                }                 
-                 String enDescription   = statusMappingRoot.get(key).get("EN").asText();
-                 String arDescription   = statusMappingRoot.get(key).get("AR").asText();
-                 String code            = statusMappingRoot.get(key).get("code").asText();
-                 String httpCode        = statusMappingRoot.get(key).get("HTTP_CODE").asText();
-                 return Map.of("EN", enDescription, "AR", arDescription, "code", code, "HTTP_CODE", httpCode);  
+            try {                
+                statusMappingRoot = mapper.readTree(statusMappingJSONString);                                           
              } catch (JsonProcessingException e) {
+                LOGGER.error("Error while parsing statusMappingJSON", e);
                  e.printStackTrace();
              }
-        }   
-        return null;
-    }
+        }
 
+        String enDescription   = statusMappingRoot.get(key).get("EN").asText();
+        String arDescription   = statusMappingRoot.get(key).get("AR").asText();
+        String code            = statusMappingRoot.get(key).get("code").asText();
+        String httpCode        = statusMappingRoot.get(key).get("HTTP_CODE").asText();
+        return Map.of("EN", enDescription, "AR", arDescription, "code", code, "HTTP_CODE", httpCode);  
+    }
 
 }
