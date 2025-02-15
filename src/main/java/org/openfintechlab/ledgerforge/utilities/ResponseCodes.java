@@ -24,7 +24,14 @@
 package org.openfintechlab.ledgerforge.utilities;
 
 
+import java.util.Map;
+
+import org.eclipse.microprofile.config.ConfigProvider;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jakarta.inject.Singleton;
 
 
@@ -34,5 +41,34 @@ import jakarta.inject.Singleton;
 public class ResponseCodes {
 
     private JsonNode statusMappingRoot = null;
+    private String statusMappingJSONString = null;
+    
+    /**
+     * This method returns the status mapping for the given key by loading the JSON translation
+     * from the configuration key `appconfig.statusMappingJSON`
+     * @param key The key to load from the configurations
+     * @return Map of status mapping
+     */
+    public Map<String, String> getStatusMapping(String key) {
+        // TODO: Add JSON schmea validation for the statusMappingJSON
+        if(statusMappingRoot == null) {
+            statusMappingJSONString = ConfigProvider.getConfig().getValue("appconfig.statusMappingJSON", String.class);
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                if (statusMappingRoot == null ){
+                    statusMappingRoot = mapper.readTree(statusMappingJSONString);
+                }                 
+                 String enDescription   = statusMappingRoot.get(key).get("EN").asText();
+                 String arDescription   = statusMappingRoot.get(key).get("AR").asText();
+                 String code            = statusMappingRoot.get(key).get("code").asText();
+                 String httpCode        = statusMappingRoot.get(key).get("HTTP_CODE").asText();
+                 return Map.of("EN", enDescription, "AR", arDescription, "code", code, "HTTP_CODE", httpCode);  
+             } catch (JsonProcessingException e) {
+                 e.printStackTrace();
+             }
+        }   
+        return null;
+    }
+
 
 }

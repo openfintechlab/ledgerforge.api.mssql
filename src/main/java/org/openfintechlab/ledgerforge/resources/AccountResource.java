@@ -22,6 +22,7 @@
  */
 package org.openfintechlab.ledgerforge.resources;
 
+import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -33,7 +34,7 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import org.jboss.logging.Logger;
@@ -41,12 +42,16 @@ import org.openfintechlab.ledgerforge.entities.Account;
 import org.openfintechlab.ledgerforge.entities.Metadata;
 import org.openfintechlab.ledgerforge.utilities.ResponseCodes;
 
+
 @Path("/account")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class AccountResource {
     
     private static final Logger LOGGER = Logger.getLogger(AccountResource.class);
+
+    @Inject
+    ResponseCodes retMap = new ResponseCodes();
 
     /**
      * This method returns all the accounts defined in the ledger
@@ -85,34 +90,47 @@ public class AccountResource {
     @Path("/{accountId}")
     public Response deleteSepcificAccountDetails(@PathParam("accountId") String accountId) {
         LOGGER.info("Deleting for account: "+accountId);
+        // TODO: Add return JSON object `Metadata` to return the status of the operation
         return Response.status(Response.Status.NOT_IMPLEMENTED).build();
     }
 
     @POST
     public Response createAccount(@Valid Account account) {
         LOGGER.info("Creating account");        
-                
-        // Map<String,String> statusCode = retMap.getStatus("SUCCESS");
-        // Metadata metadata = new Metadata(statusCode.get("code"), statusCode.get("EN"), null);        
-        // return Response.status(Response.Status.OK)
-        //                     .entity(metadata)
-        //                     .build();
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        // Step#1: Perform the create operations by calling the relevant service
+        // TODO: Perform the create operations        
+
+        // Step#2: Return the response. In-case of any exception in doing the data operations,
+        // a exception will be raised which will be captured by the Exception handler. Keeping 
+        // this in mind, no need to handle exception cases or error codes.        
+        Map<String,String> statusCode = retMap.getStatusMapping("SUCCESS");
+        Metadata metadata = new Metadata(statusCode.get("code"), statusCode.get("EN"), null);
+        
+        return Response.status(Integer.parseInt(statusCode.get("HTTP_CODE")))
+                             .entity(metadata)
+                             .header("X-Reply-Timestamp", LocalDateTime.now().toString())
+                             .header("X-Response-Code", statusCode.get("code"))
+                             .build();
     }
     
     @PUT
     @Path("/{accountId}")
     public Response updateAccount( @PathParam("accountId") String accountId, @Valid Account account) {
         LOGGER.info("Updating account with ID: "+ accountId);
-        
-        
-        // Map<String,String> statusCode = retMap.getStatus("SUCCESS");
+        // Step#1: Perform the update operations by calling the relevant service
+        // TODO: Perform the update operation
 
-        // // Map<String,String> statusCode = ReturnCodeMappings.getInstance().getStatus("SUCCESS");
-        // Metadata metadata = new Metadata(statusCode.get("code"), statusCode.get("EN"), null);
+        // Step#2: Return the response. In-case of any exception in doing the data operations,
+        // a exception will be raised which will be captured by the Exception handler. Keeping 
+        // this in mind, no need to handle exception cases or error codes.        
+        Map<String,String> statusCode = retMap.getStatusMapping("SUCCESS");
+        Metadata metadata = new Metadata(statusCode.get("code"), statusCode.get("EN"), null);
         
-        // return Response.status(Response.Status.OK).entity(metadata).build();
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        return Response.status(Integer.parseInt(statusCode.get("HTTP_CODE")))
+                             .entity(metadata)
+                             .header("X-Reply-Timestamp", LocalDateTime.now().toString())
+                             .header("X-Response-Code", statusCode.get("code"))
+                             .build();        
     }
 
     
