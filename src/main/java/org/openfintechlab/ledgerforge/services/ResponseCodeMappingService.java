@@ -21,7 +21,7 @@
  * Reference:
  * - https://github.com/openfintechlab/ledgerforge.api.mssql/wiki/Message-Structure
  */
-package org.openfintechlab.ledgerforge.utilities;
+package org.openfintechlab.ledgerforge.services;
 
 
 import java.util.Map;
@@ -38,7 +38,7 @@ import jakarta.inject.Singleton;
 // ConfigProvider.getConfig().getValue("appconfig.test", String.class);
 
 @Singleton
-public class ResponseCodes {
+public class ResponseCodeMappingService {
 
     private JsonNode statusMappingRoot = null;
     private String statusMappingJSONString = null;

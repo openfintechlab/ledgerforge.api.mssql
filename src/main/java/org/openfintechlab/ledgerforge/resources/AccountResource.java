@@ -36,11 +36,12 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.time.LocalDateTime;
 import java.util.Map;
-
 import org.jboss.logging.Logger;
+
+
 import org.openfintechlab.ledgerforge.entities.Account;
 import org.openfintechlab.ledgerforge.entities.Metadata;
-import org.openfintechlab.ledgerforge.utilities.ResponseCodes;
+import org.openfintechlab.ledgerforge.services.ResponseCodeMappingService;
 
 
 @Path("/account")
@@ -51,7 +52,7 @@ public class AccountResource {
     private static final Logger LOGGER = Logger.getLogger(AccountResource.class);
 
     @Inject
-    ResponseCodes retMap = new ResponseCodes();
+    ResponseCodeMappingService retMap = new ResponseCodeMappingService();
 
     /**
      * This method returns all the accounts defined in the ledger
