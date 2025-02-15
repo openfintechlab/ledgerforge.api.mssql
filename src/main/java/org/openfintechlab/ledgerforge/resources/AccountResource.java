@@ -34,8 +34,12 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.util.Map;
+
 import org.jboss.logging.Logger;
 import org.openfintechlab.ledgerforge.entities.Account;
+import org.openfintechlab.ledgerforge.entities.Metadata;
+import org.openfintechlab.ledgerforge.utilities.ResponseCodes;
 
 @Path("/account")
 @Produces(MediaType.APPLICATION_JSON)
@@ -87,7 +91,12 @@ public class AccountResource {
     @POST
     public Response createAccount(@Valid Account account) {
         LOGGER.info("Creating account");        
-        
+                
+        // Map<String,String> statusCode = retMap.getStatus("SUCCESS");
+        // Metadata metadata = new Metadata(statusCode.get("code"), statusCode.get("EN"), null);        
+        // return Response.status(Response.Status.OK)
+        //                     .entity(metadata)
+        //                     .build();
         return Response.status(Response.Status.NOT_IMPLEMENTED).build();
     }
     
@@ -95,6 +104,14 @@ public class AccountResource {
     @Path("/{accountId}")
     public Response updateAccount( @PathParam("accountId") String accountId, @Valid Account account) {
         LOGGER.info("Updating account with ID: "+ accountId);
+        
+        
+        // Map<String,String> statusCode = retMap.getStatus("SUCCESS");
+
+        // // Map<String,String> statusCode = ReturnCodeMappings.getInstance().getStatus("SUCCESS");
+        // Metadata metadata = new Metadata(statusCode.get("code"), statusCode.get("EN"), null);
+        
+        // return Response.status(Response.Status.OK).entity(metadata).build();
         return Response.status(Response.Status.NOT_IMPLEMENTED).build();
     }
 

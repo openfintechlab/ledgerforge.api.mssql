@@ -13,5 +13,6 @@ quarkus:
       level: INFO
       
 appconfig:  
-  statusMappingJSON: '{"NO_AUTH_HEADER":{"code":"9100","EN":"Authentication Failure","AR":"فشل المصادقة"},"NO_MSSG_ID":{"code":"9101","EN":"Required Input Missing: Message ID","AR":"فشلإدخال المطلوب مفقود: معرف الرسالة"}}'
+  statusMappingJSON: '{"NO_AUTH_HEADER":{"code":"9100","EN":"Authentication Failure","AR":"فشل المصادقة"},"NO_MSSG_ID":{"code":"9101","EN":"Required Input Missing: Message ID","AR":"فشلإدخال المطلوب مفقود: معرف الرسالة"},"SUCCESS":{"code":"0000","EN":"Success","AR":"نجاح"}}'  
+  test: "test"
   
