@@ -22,29 +22,68 @@
  */
 package org.openfintechlab.ledgerforge.test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openfintechlab.ledgerforge.entities.Account;
 
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.transaction.Transactional;
+import org.jboss.logging.Logger;
 
 @QuarkusTest
 public class AccountEntityTest {
 
+    private static final Logger LOGGER = Logger.getLogger(AccountEntityTest.class);
+
     @Test
-    @DisplayName("Test to create account entity")
+    @DisplayName("Test to check create, retrieve, update and delete account entity")
     @Transactional
     void testCreateAccountEntity() {
-        
-        Account account = new Account();
-        
-        account.instrumentID        = "123456";
-        account.instrumentType      = "ACCOUNt";
-        account.instrunmentNumber   = "123";
-        account.instrunmentToken    = "ASDASDASDLKJLASDLAKSJD";
-        account.currencyCodeIso     = "AED";
+        String _entityID = "UNITTEST-123456";
+        try {
+            // Step#1: Dry clean the entity
+            if (Account.findById(_entityID) != null) {
+                Account.deleteById(_entityID);
+            }
 
-        account.persist();
+            Account account = new Account();
+            account.instrumentID = _entityID;
+            account.instrumentType = "ACCOUNT";
+            account.instrunmentNumber = "123";
+            account.instrunmentToken = "ASDASDASDLKJLASDLAKSJD";
+            account.currencyCodeIso = "AED";
+            account.createdon = LocalDateTime.now();
+            account.updatedon = LocalDateTime.now();
+
+            account.persist();
+
+            Account persistedAccount = Account.findById(_entityID);
+
+            assertNotNull(persistedAccount);
+            assertEquals(_entityID, persistedAccount.instrumentID);
+            assertEquals("ACCOUNT", persistedAccount.instrumentType);
+            assertEquals("123", persistedAccount.instrunmentNumber);
+            assertEquals("ASDASDASDLKJLASDLAKSJD", persistedAccount.instrunmentToken);
+            assertEquals("AED", persistedAccount.currencyCodeIso);
+
+            account.instrumentType = "ACCOUNT-UPDATED";
+            account.persist();
+
+            persistedAccount = Account.findById(_entityID);
+            assertEquals("ACCOUNT-UPDATED", persistedAccount.instrumentType);
+
+            account.delete();
+
+        } catch (Exception e) {
+            LOGGER.error("Exception occurred while creating account entity: ", e);
+            fail("Exception occurred while creating account entity: " + e.getMessage());
+        }
+
     }
 }
