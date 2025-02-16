@@ -39,6 +39,8 @@ import java.util.Map;
 import org.jboss.logging.Logger;
 import org.openfintechlab.ledgerforge.entities.Account;
 import org.openfintechlab.ledgerforge.entities.Metadata;
+import org.openfintechlab.ledgerforge.entities.dto.AccountDTO;
+import org.openfintechlab.ledgerforge.services.AccountService;
 import org.openfintechlab.ledgerforge.services.ResponseCodeMappingService;
 
 
@@ -49,8 +51,8 @@ public class AccountResource {
     
     private static final Logger LOGGER = Logger.getLogger(AccountResource.class);
 
-    @Inject
-    ResponseCodeMappingService retMap = new ResponseCodeMappingService();
+    @Inject ResponseCodeMappingService  retMap          = new ResponseCodeMappingService();
+    @Inject AccountService              accountService = new AccountService();
 
     /**
      * This method returns all the accounts defined in the ledger
@@ -59,14 +61,16 @@ public class AccountResource {
     @GET    
     public Response getAllAccountsDefinedInTheLedger() {
         LOGGER.info("Getting all accounts defined in the ledger");
-        Map<String,String> statusCode = retMap.getStatusMapping("SUCCESS");
+        Map<String, Object> mapAccount = accountService.getAllAccounts();
+        AccountDTO accountDTO   = (AccountDTO) mapAccount.get("accountDTO");
+        Integer responseCode    = (Integer) mapAccount.get("responseCode");
+        String statusCode       =   (String) mapAccount.get("statusCode");
 
-        return Response.status(Integer.parseInt(statusCode.get("HTTP_CODE")))
-            .entity(Account.listAll())
+        return Response.status(responseCode)
+            .entity(accountDTO)
             .header("X-Reply-Timestamp", LocalDateTime.now().toString())
-            .header("X-Response-Code", statusCode.get("code"))
+            .header("X-Response-Code", statusCode)
             .build();
-        // return Response.status(Response.Status.NOT_IMPLEMENTED).build();
     }
 
     /**

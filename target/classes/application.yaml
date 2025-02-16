@@ -20,7 +20,9 @@ quarkus:
     console:      
       color: true      
       level: INFO
+  jackson:
+    serialization-inclusion: NON_EMPTY
       
 appconfig:  
-  statusMappingJSON: '{"NO_AUTH_HEADER":{"code":"9100","HTTP_CODE":"403","EN":"Authentication Failure","AR":"فشل المصادقة"},"NO_MSSG_ID":{"code":"9101","HTTP_CODE":"400","EN":"Required Input Missing: Message ID","AR":"فشلإدخال المطلوب مفقود: معرف الرسالة"},"SUCCESS":{"code":"0000","HTTP_CODE":"200","EN":"Success","AR":"نجاح"}}'  
+  statusMappingJSON: '{"NO_AUTH_HEADER":{"code":"9100","HTTP_CODE":"403","EN":"Authentication Failure","AR":"فشل المصادقة"},"NO_MSSG_ID":{"code":"9101","HTTP_CODE":"400","EN":"Required Input Missing: Message ID","AR":"فشلإدخال المطلوب مفقود: معرف الرسالة"},"SUCCESS":{"code":"0000","HTTP_CODE":"200","EN":"Success","AR":"نجاح"},"BERR_NO_RECORD_FOUND":{"code":"8001","HTTP_CODE":"404","EN":"No Record Found","AR":"لم يتم العثور على سجل"}}'  
   
