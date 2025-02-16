@@ -1,4 +1,9 @@
 
+DELETE FROM LEDFOR_TRANSACTION;
+DELETE FROM LEDFOR_ACCOUNT;
+DELETE FROM LEDFOR_TRANSACTIONTYPE;
+DELETE FROM LEDFOR_ISOCURRENCIES;
+
 
 DROP TABLE IF EXISTS LEDFOR_ACCOUNT;
 DROP TABLE IF EXISTS LEDFOR_TRANSACTION;
@@ -7,7 +12,7 @@ DROP TABLE IF EXISTS LEDFOR_ISOCURRENCIES;
 
 -- Create LEDFOR_TRANSACTIONTYPE table
 CREATE TABLE LEDFOR_TRANSACTIONTYPE (
-    transactionCode NVARCHAR(255) PRIMARY KEY,
+    transactionCode NVARCHAR(64) PRIMARY KEY,
     description NVARCHAR(255),
     corelCode NVARCHAR(255),
     recordHash NVARCHAR(255),
@@ -50,15 +55,15 @@ CREATE TABLE LEDFOR_ACCOUNT (
 
 -- Create LEDFOR_TRANSACTION table
 CREATE TABLE LEDFOR_TRANSACTION (
-    instrumentID NVARCHAR(255),
-    transaction_id NVARCHAR(255) PRIMARY KEY,
-    source_trasnaction_ref NVARCHAR(255),
-    corel_trasnaction_id NVARCHAR(255),
-    transactionCode NVARCHAR(255),
-    type NVARCHAR(255),
-    crdrIndicator NVARCHAR(50),
-    merchantDetails NVARCHAR(255),
-    amount DECIMAL(18, 2),
+    instrumentID NVARCHAR(64),
+    transaction_id NVARCHAR(64) PRIMARY KEY,
+    source_trasnaction_ref NVARCHAR(128),
+    corel_trasnaction_id NVARCHAR(128),
+    transactionCode NVARCHAR(64),
+    type NVARCHAR(128),
+    crdrIndicator NVARCHAR(3),
+    merchantDetails NVARCHAR(255),    
+    amount DECIMAL(18, 5),
     currency_code_iso NVARCHAR(3),
     description NVARCHAR(255),
     transaction_datetime NVARCHAR(255),

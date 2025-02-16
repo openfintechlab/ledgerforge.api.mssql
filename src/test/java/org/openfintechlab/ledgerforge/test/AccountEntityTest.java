@@ -29,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.openfintechlab.ledgerforge.entities.Account;
 
@@ -37,13 +38,14 @@ import jakarta.transaction.Transactional;
 import org.jboss.logging.Logger;
 
 @QuarkusTest
+@Tag("account")
 public class AccountEntityTest {
 
     private static final Logger LOGGER = Logger.getLogger(AccountEntityTest.class);
 
     @Test
-    @DisplayName("Test to check create, retrieve, update and delete account entity")
-    @Transactional
+    @DisplayName("Test to check create, retrieve, update and delete (CRUD) account entity")
+    @Transactional    
     void testCreateAccountEntity() {
         String _entityID = "UNITTEST-123456";
         try {
