@@ -58,13 +58,15 @@ public class AccountResource {
      */
     @GET    
     public Response getAllAccountsDefinedInTheLedger() {
-        // TODO: `GET /account` Add logic to validate the http header components
-        // TODO: `GET /account` Add exception handling mechanisim so that meaningful message can be returned to the user
-        // TODO: `GET /account` Create a Business object for account definition
-        // TODO: `GET /account` Add logic to retrieve accounts from the database
-
         LOGGER.info("Getting all accounts defined in the ledger");
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        Map<String,String> statusCode = retMap.getStatusMapping("SUCCESS");
+
+        return Response.status(Integer.parseInt(statusCode.get("HTTP_CODE")))
+            .entity(Account.listAll())
+            .header("X-Reply-Timestamp", LocalDateTime.now().toString())
+            .header("X-Response-Code", statusCode.get("code"))
+            .build();
+        // return Response.status(Response.Status.NOT_IMPLEMENTED).build();
     }
 
     /**

@@ -5,9 +5,9 @@ quarkus:
     db-kind: mssql
     username: sa
     password: 524udb764L9aCxEJ
-    
     jdbc:
-      url: jdbc:sqlserver://host.docker.internal:1433;databaseName=OFTL_LEDGERFORGE;encrypt=false;trustServerCertificate=false
+      url: jdbc:sqlserver://192.168.65.254:1433;databaseName=OFTL_LEDGERFORGE;encrypt=false;trustServerCertificate=false;loginTimeout=60
+      acquisition-timeout: 60s
   hibernate-orm:
     database: 
       generation: none
