@@ -82,7 +82,16 @@ public class AccountResource {
     @Path("/{accountId}")
     public Response getSepcificAccountDetails(@PathParam("accountId") String accountId) {
         LOGGER.info("Getting account details for account: "+accountId);
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        Map<String, Object> mapAccount = accountService.getAccount(accountId);
+        AccountDTO accountDTO   = (AccountDTO) mapAccount.get("accountDTO");
+        Integer responseCode    = (Integer) mapAccount.get("responseCode");
+        String statusCode       =   (String) mapAccount.get("statusCode");
+
+        return Response.status(responseCode)
+            .entity(accountDTO)
+            .header("X-Reply-Timestamp", LocalDateTime.now().toString())
+            .header("X-Response-Code", statusCode)
+            .build();
     }
 
 
@@ -95,47 +104,48 @@ public class AccountResource {
     @Path("/{accountId}")
     public Response deleteSepcificAccountDetails(@PathParam("accountId") String accountId) {
         LOGGER.info("Deleting for account: "+accountId);
-        // TODO: Add return JSON object `Metadata` to return the status of the operation
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+        Map<String, Object> mapAccount = accountService.deleteAccount(accountId);
+        Integer responseCode = (Integer) mapAccount.get("responseCode");
+        String statusCode = (String) mapAccount.get("statusCode");
+        AccountDTO accountDTO   = (AccountDTO) mapAccount.get("accountDTO");
+
+        return Response.status(responseCode)
+            .entity(accountDTO)
+            .header("X-Reply-Timestamp", LocalDateTime.now().toString())
+            .header("X-Response-Code", statusCode)
+            .build();
     }
 
     @POST
     public Response createAccount(@Valid Account account) {
         LOGGER.info("Creating account");        
-        // Step#1: Perform the create operations by calling the relevant service
-        // TODO: Perform the create operations        
+        Map<String, Object> mapAccount = accountService.createAccount(account);
+        Integer responseCode = (Integer) mapAccount.get("responseCode");
+        String statusCode = (String) mapAccount.get("statusCode");
+        AccountDTO accountDTO = (AccountDTO) mapAccount.get("accountDTO");
 
-        // Step#2: Return the response. In-case of any exception in doing the data operations,
-        // a exception will be raised which will be captured by the Exception handler. Keeping 
-        // this in mind, no need to handle exception cases or error codes.        
-        Map<String,String> statusCode = retMap.getStatusMapping("SUCCESS");
-        Metadata metadata = new Metadata(statusCode.get("code"), statusCode.get("EN"), null);
-        
-        return Response.status(Integer.parseInt(statusCode.get("HTTP_CODE")))
-                             .entity(metadata)
-                             .header("X-Reply-Timestamp", LocalDateTime.now().toString())
-                             .header("X-Response-Code", statusCode.get("code"))
-                             .build();
+        return Response.status(responseCode)
+                        .entity(accountDTO)
+                        .header("X-Reply-Timestamp", LocalDateTime.now().toString())
+                        .header("X-Response-Code", statusCode)
+                        .build();
     }
     
     @PUT
     @Path("/{accountId}")
     public Response updateAccount( @PathParam("accountId") String accountId, @Valid Account account) {
         LOGGER.info("Updating account with ID: "+ accountId);
-        // Step#1: Perform the update operations by calling the relevant service
-        // TODO: Perform the update operation
+        Map<String, Object> mapAccount = accountService.updateAccount(accountId, account);
+        Integer responseCode = (Integer) mapAccount.get("responseCode");
+        String statusCode = (String) mapAccount.get("statusCode");
+        AccountDTO accountDTO = (AccountDTO) mapAccount.get("accountDTO");
 
-        // Step#2: Return the response. In-case of any exception in doing the data operations,
-        // a exception will be raised which will be captured by the Exception handler. Keeping 
-        // this in mind, no need to handle exception cases or error codes.        
-        Map<String,String> statusCode = retMap.getStatusMapping("SUCCESS");
-        Metadata metadata = new Metadata(statusCode.get("code"), statusCode.get("EN"), null);
-        
-        return Response.status(Integer.parseInt(statusCode.get("HTTP_CODE")))
-                             .entity(metadata)
-                             .header("X-Reply-Timestamp", LocalDateTime.now().toString())
-                             .header("X-Response-Code", statusCode.get("code"))
-                             .build();        
+        return Response.status(responseCode)
+            .entity(accountDTO)
+            .header("X-Reply-Timestamp", LocalDateTime.now().toString())
+            .header("X-Response-Code", statusCode)
+            .build();
+
     }
 
     

@@ -26,23 +26,31 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "LEDFOR_ACCOUNT")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@EqualsAndHashCode(callSuper = false)
 public class Account extends PanacheEntityBase {
 
     @Id
     @Column(name = "instrumentID", nullable = false)        
     public String instrumentID;
 
-    @Column(name = "instrunmentToken")
-    public String instrunmentToken;
+    @Column(name = "instrumentToken")
+    public String instrumentToken;
 
     @Column(name = "instrumentNumber")
-    public String instrunmentNumber;
+    public String instrumentNumber;
 
     @Column(name = "instrumentType")
     public String instrumentType;
@@ -79,5 +87,95 @@ public class Account extends PanacheEntityBase {
 
     @Column(name = "updatedon")
     public LocalDateTime updatedon;
+
+    public void setInstrumentID(String instrumentID) {
+        if (instrumentID != null) {
+            this.instrumentID = instrumentID;
+        }
+    }
+
+    public void setInstrumentToken(String instrunmentToken) {
+        if (instrunmentToken != null) {
+            this.instrumentToken = instrunmentToken;
+        }
+    }
+
+    public void setInstrumentNumber(String instrunmentNumber) {
+        if (instrunmentNumber != null) {
+            this.instrumentNumber = instrunmentNumber;
+        }
+    }
+
+    public void setInstrumentType(String instrumentType) {
+        if (instrumentType != null) {
+            this.instrumentType = instrumentType;
+        }
+    }
+
+    public void setInstrumentStandNumber(String instrumentStandNumber) {
+        if (instrumentStandNumber != null) {
+            this.instrumentStandNumber = instrumentStandNumber;
+        }
+    }
+
+    public void setProviderId(String providerId) {
+        if (providerId != null) {
+            this.providerId = providerId;
+        }
+    }
+
+    public void setLinkedTo(String linkedTo) {
+        if (linkedTo != null) {
+            this.linkedTo = linkedTo;
+        }
+    }
+
+    public void setInstrumentHash(String instrumentHash) {
+        if (instrumentHash != null) {
+            this.instrumentHash = instrumentHash;
+        }
+    }
+
+    public void setPersonID(String personID) {
+        if (personID != null) {
+            this.personID = personID;
+        }
+    }
+
+    public void setPersonType(String personType) {
+        if (personType != null) {
+            this.personType = personType;
+        }
+    }
+
+    public void setCurrencyCodeIso(String currencyCodeIso) {
+        if (currencyCodeIso != null) {
+            this.currencyCodeIso = currencyCodeIso;
+        }
+    }
+
+    public void setStatus(String status) {
+        if (status != null) {
+            this.status = status;
+        }
+    }
+
+    public void setRecordHash(String recordHash) {
+        if (recordHash != null) {
+            this.recordHash = recordHash;
+        }
+    }
+
+    public void setCreatedon(LocalDateTime createdon) {
+        if (createdon != null) {
+            this.createdon = createdon;
+        }
+    }
+
+    public void setUpdatedon(LocalDateTime updatedon) {
+        if (updatedon != null) {
+            this.updatedon = updatedon;
+        }
+    }
 }
 

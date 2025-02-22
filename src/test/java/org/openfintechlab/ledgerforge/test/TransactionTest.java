@@ -87,8 +87,8 @@ public class TransactionTest {
             // Step#1: Create the account
             account.instrumentID = _accountID;
             account.instrumentType = "ACCOUNT";
-            account.instrunmentNumber = "123";
-            account.instrunmentToken = "ASDASDASDLKJLASDLAKSJD";
+            account.instrumentNumber = "123";
+            account.instrumentToken = "ASDASDASDLKJLASDLAKSJD";
             account.currencyCodeIso = "AED";
             account.createdon = LocalDateTime.now();
             account.updatedon = LocalDateTime.now();

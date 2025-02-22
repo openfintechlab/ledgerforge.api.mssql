@@ -57,8 +57,8 @@ public class AccountEntityTest {
             Account account = new Account();
             account.instrumentID = _entityID;
             account.instrumentType = "ACCOUNT";
-            account.instrunmentNumber = "123";
-            account.instrunmentToken = "ASDASDASDLKJLASDLAKSJD";
+            account.instrumentNumber = "123";
+            account.instrumentToken = "ASDASDASDLKJLASDLAKSJD";
             account.currencyCodeIso = "AED";
             account.createdon = LocalDateTime.now();
             account.updatedon = LocalDateTime.now();
@@ -70,8 +70,8 @@ public class AccountEntityTest {
             assertNotNull(persistedAccount);
             assertEquals(_entityID, persistedAccount.instrumentID);
             assertEquals("ACCOUNT", persistedAccount.instrumentType);
-            assertEquals("123", persistedAccount.instrunmentNumber);
-            assertEquals("ASDASDASDLKJLASDLAKSJD", persistedAccount.instrunmentToken);
+            assertEquals("123", persistedAccount.instrumentNumber);
+            assertEquals("ASDASDASDLKJLASDLAKSJD", persistedAccount.instrumentToken);
             assertEquals("AED", persistedAccount.currencyCodeIso);
 
             account.instrumentType = "ACCOUNT-UPDATED";

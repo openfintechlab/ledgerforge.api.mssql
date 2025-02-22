@@ -37,7 +37,7 @@ CREATE TABLE LEDFOR_ACCOUNT (
 	instrumentID NVARCHAR(64) PRIMARY KEY,
     instrumentNumber NVARCHAR(64),
     instrumentType NVARCHAR(128),
-    instrunmentToken NVARCHAR(255),    
+    instrumentToken NVARCHAR(255),    
     instrumentStandNumber NVARCHAR(64),
     providerId NVARCHAR(64),
     linkedTo NVARCHAR(64),
