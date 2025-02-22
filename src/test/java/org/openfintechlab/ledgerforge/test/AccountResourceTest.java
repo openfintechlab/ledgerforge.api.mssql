@@ -23,151 +23,163 @@
 package org.openfintechlab.ledgerforge.test;
 
 import static io.restassured.RestAssured.given;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import io.quarkus.test.junit.QuarkusTest;
-import static org.hamcrest.Matchers.*;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.openfintechlab.ledgerforge.entities.Account;
+
+import io.quarkus.test.junit.QuarkusTest;
+import jakarta.transaction.Transactional;
+
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.time.LocalDateTime;
 
 @QuarkusTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@DisplayName("API test cases for `account` resource")
 public class AccountResourceTest {
+  private static String _entityID = "UNITTEST-123456";
+  private static String _newEntityIDString = "UNITTEST-NEW0000001";
 
-  @Test    
-  @DisplayName("Test to get all accounts defined in the ledger without Bearer token")
-  void testGetAllAccountsDefinedInTheLedger() {
-    given()
-      .header("X-Message-ID", "MESSAGEID")
-      .when().get("/account")
-      .then()
-       .statusCode(200); // Unauthorized due to missing Bearer token
+  @BeforeAll
+  @Transactional
+  static void setup() {
+     if (Account.findById(_entityID) != null) {
+      Account.deleteById(_entityID);
+    }
+
+    Account account = new Account();
+    account.instrumentID = _entityID;
+    account.instrumentType = "ACCOUNT";
+    account.instrumentNumber = "123";
+    account.instrumentToken = "ASDASDASDLKJLASDLAKSJD";
+    account.currencyCodeIso = "AED";
+    account.createdon = LocalDateTime.now();
+    account.updatedon = LocalDateTime.now();
+    account.persist();
+    
+    assertEquals(true, account.isPersistent());
   }
 
-  @Test    
-  @DisplayName("Test to get all accounts defined in the ledger with Bearer token")
+  @AfterAll  
+  @Transactional
+  static void tearDown() {
+    if (Account.findById(_entityID) != null) {
+      Account.deleteById(_entityID);
+    }
+    if (Account.findById(_newEntityIDString) != null) {
+      Account.deleteById(_newEntityIDString);
+    }
+  }
+
+  @Test
+  @Order(1)
+  @DisplayName("Test to get all accounts defined in the ledger")
   void testGetAllAccountsDefinedInTheLedgerWithAuthHeader() {
-    int statusCode = given()
-                      .when().get("/account")
-                      .then()
-                      .extract()
-                      .statusCode();
-
-    if(statusCode == 200){
-      given()
-          .header("Authorization", "Bearer 123")
-          .header("X-Message-ID", "MESSAGEID")
-          .when().get("/account")          
-          .then()
-          .statusCode(200)
-          .header("Content-Type", "application/json;charset=UTF-8")
-          .header("X-Reply-Timestamp", notNullValue())
-          .header("X-Response-Code", "0000")
-          .body("accounts", not(empty()));
-    }else{
-      given()
-          .header("Authorization", "Bearer 123")
-          .header("X-Message-ID", "MESSAGEID")
-          .when().get("/account")          
-          .then()
-          .statusCode(404)
-          .header("Content-Type", "application/json;charset=UTF-8")
-          .header("X-Reply-Timestamp", notNullValue())
-          .header("X-Response-Code", "8001")
-          .body("accounts", not(empty()));
-    }                      
+    given()
+        .header("Authorization", "Bearer 123")
+        .header("X-Message-ID", "MESSAGEID")
+        .when().get("/account")
+        .then()
+        .statusCode(200)
+        .header("Content-Type", "application/json;charset=UTF-8")
+        .header("X-Reply-Timestamp", notNullValue())
+        .header("X-Response-Code", "0000")
+        .body("accounts", not(empty()));
 
   }
 
   @Test
-  @DisplayName("Test to get specific account with either 404 or 200")
-  void testGetSpecificAccountDetails() {
-    int statusCode = given()
-            .header("Authorization", "Bearer 123")
-            .header("X-Message-ID", "MESSAGEID")
-            .when().get("/account")            
-            .then()
-            .extract()
-            .statusCode();
-
-       if(statusCode == 200){
-        given()
-            .header("Authorization", "Bearer 123")
-            .header("X-Message-ID", "MESSAGEID")
-            .when().get("/account/1")          
-            .then()
-            .statusCode(200)
-            .header("Content-Type", "application/json;charset=UTF-8")
-            .header("X-Reply-Timestamp", notNullValue())
-            .header("X-Response-Code", "0000")
-            .body("accounts", not(empty()));
-      }else{
-        given()
-            .header("Authorization", "Bearer 123")
-            .header("X-Message-ID", "MESSAGEID")
-            .when().get("/account")          
-            .then()
-            .statusCode(404)
-            .header("Content-Type", "application/json;charset=UTF-8")
-            .header("X-Reply-Timestamp", notNullValue())
-            .header("X-Response-Code", "8001")
-            .body("accounts", not(empty()));
-      }           
-  }
-
-  @Test
-  void testDeleteSpecificAccountDetails() {
+  @Order(2)
+  @DisplayName("Test to verify if an account with id _entityID is returned")  
+  void testGetAccountWithID() {
     given()
       .header("Authorization", "Bearer 123")
       .header("X-Message-ID", "MESSAGEID")
-      .when().delete("/account/1")
+      .when()
+      .get("/account/" + _entityID)
       .then()
-       .statusCode(200)
-       .header("Content-Type", "application/json")
-       .body("status", equalTo("DELETED"));
+        .statusCode(200)
+        .header("Content-Type", "application/json;charset=UTF-8")
+        .header("X-Reply-Timestamp", notNullValue())
+        .header("X-Response-Code", "0000")
+        .body("accounts[0].instrumentID", equalTo(_entityID));
   }
 
+
   @Test
-  void testUpdateAccount() {
+  @Order(3)  
+  @DisplayName("Test to update account")
+  void testUpdateAccount() {    
     given()
-      .header("Authorization", "Bearer 123")
-      .header("X-Message-ID", "MESSAGEID")
-      .contentType("application/json")
-      .body("{\"accountId\": \"1234567\", \"accountName\": \"Updated Account\"}")
-      .when().put("/account/1234567")
-      .then()
-       .statusCode(200)
-       .header("Content-Type", "application/json;charset=UTF-8")
-       .body("status", equalTo("0000"));
+        .header("Authorization", "Bearer 123")
+        .header("X-Message-ID", "MESSAGEID")
+        .contentType("application/json")
+        .body("{\"instrumentNumber\":\"9999999\",\"instrumentType\":\"ACCOUNT\",\"status\":\"IN-ACTIVE\"}")
+        .when().put("/account/"+ _entityID)
+        .then()
+        .statusCode(200)
+        .header("Content-Type", "application/json;charset=UTF-8")
+        .body("metadata.status", equalTo("0000"));
   }
 
   @Test
+  @Order(4)
   @DisplayName("Test Creating a new account")
   void testCreateAccount() {
     given()
-      .header("Authorization", "Bearer 123")
-      .header("X-Message-ID", "MESSAGEID")
-      .contentType("application/json")
-      .body("{\"accountName\": \"New Account\"}")
-      .when().post("/account")
-      .then()
-       .statusCode(200)
-       .header("Content-Type", "application/json;charset=UTF-8")
-       .header("X-Reply-Timestamp", notNullValue())
-       .header("X-Response-Code", "0000")
-       .body("accounts", not(empty()));
+        .header("Authorization", "Bearer 123")
+        .header("X-Message-ID", "MESSAGEID")
+        .contentType("application/json")
+        .body("{\"instrumentID\":\""+_newEntityIDString+"\",\"instrunmentToken\":\"token123\",\"instrumentNumber\":\"987654321\",\"instrumentType\":\"typeA\",\"instrumentStandNumber\":\"stand123\",\"providerId\":\"provider001\",\"linkedTo\":\"linkedAccount001\",\"instrumentHash\":\"hash123\",\"personID\":\"person001\",\"personType\":\"individual\",\"currencyCodeIso\":\"USD\",\"status\":\"ACTIVE\",\"recordHash\":\"recordHash123\",\"createdon\":\"2025-02-22T10:00:00\",\"updatedon\":\"2025-02-22T10:00:00\"}")
+        .when().post("/account")
+        .then()
+        .statusCode(200)
+        .header("Content-Type", "application/json;charset=UTF-8")
+        .header("X-Reply-Timestamp", notNullValue())
+        .header("X-Response-Code", "0000")
+        .body("accounts", not(empty()));
   }
 
   @Test
+  @Order(5)  
   @DisplayName("Test if /account endpoint returns at least one account")
   void testIfAccountEndpointReturnsAtLeastOneAccount() {
     given()
-      .header("Authorization", "Bearer 123")
-      .header("X-Message-ID", "MESSAGEID")
-      .when().get("/account")
-      .then()
-       .statusCode(200)
-       .header("Content-Type", "application/json;charset=UTF-8")
-       .header("X-Reply-Timestamp", notNullValue())
-       .header("X-Response-Code", "0000")
-       .body("accounts.size()", greaterThan(0));
+        .header("Authorization", "Bearer 123")
+        .header("X-Message-ID", "MESSAGEID")
+        .when().get("/account")
+        .then()
+        .statusCode(200)
+        .header("Content-Type", "application/json;charset=UTF-8")
+        .header("X-Reply-Timestamp", notNullValue())
+        .header("X-Response-Code", "0000")
+        .body("accounts.size()", greaterThan(0));
   }
+
+
+  @Test  
+  @Order(6)
+  @DisplayName("Test to delete specific account")
+  void testDeleteSpecificAccount() {
+    given()
+        .header("Authorization", "Bearer 123")
+        .header("X-Message-ID", "MESSAGEID")
+        .when().delete("/account/" + _entityID)
+        .then()
+        .statusCode(200)
+        .header("Content-Type", "application/json;charset=UTF-8")
+        .header("X-Reply-Timestamp", notNullValue())
+        .header("X-Response-Code", "0000")
+        .body("metadata.status", equalTo("0000"));
+  }
+
 }

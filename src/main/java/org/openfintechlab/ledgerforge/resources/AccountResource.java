@@ -38,7 +38,6 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import org.jboss.logging.Logger;
 import org.openfintechlab.ledgerforge.entities.Account;
-import org.openfintechlab.ledgerforge.entities.Metadata;
 import org.openfintechlab.ledgerforge.entities.dto.AccountDTO;
 import org.openfintechlab.ledgerforge.services.AccountService;
 import org.openfintechlab.ledgerforge.services.ResponseCodeMappingService;

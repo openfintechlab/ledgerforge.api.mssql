@@ -28,8 +28,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.time.LocalDateTime;
 
 import org.jboss.logging.Logger;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -44,13 +44,13 @@ import jakarta.transaction.Transactional;
 public class TransactionTest {
     private static final Logger LOGGER = Logger.getLogger(TransactionTest.class);
 
-    private String _accountID;
-    private String _transactionID;
-    private String _transactionCode;
+    private static String _accountID;
+    private static String _transactionID;
+    private static String _transactionCode;
 
-    @BeforeEach
+    @BeforeAll
     @Transactional
-    void setUp() {
+    static void setUp() {
         _accountID = "UNITTEST-123456";
         _transactionID = "UTTRANS-101010101";
         _transactionCode = "1001";
@@ -64,9 +64,9 @@ public class TransactionTest {
         }
     }
 
-    @AfterEach
+    @AfterAll
     @Transactional
-    void tearDown() {
+    static void tearDown() {
         // Clean up data after each test
         if (Transaction.findById(_transactionID) != null) {
             Transaction.deleteById(_transactionID);
