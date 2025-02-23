@@ -27,6 +27,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,6 +40,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Data
 @EqualsAndHashCode(callSuper = false)
 public class Account extends PanacheEntityBase {
 
@@ -176,6 +178,66 @@ public class Account extends PanacheEntityBase {
         if (updatedon != null) {
             this.updatedon = updatedon;
         }
+    }
+
+    public String getInstrumentID() {
+        return instrumentID;
+    }
+
+    public String getInstrumentToken() {
+        return instrumentToken;
+    }
+
+    public String getInstrumentNumber() {
+        return instrumentNumber;
+    }
+
+    public String getInstrumentType() {
+        return instrumentType;
+    }
+
+    public String getInstrumentStandNumber() {
+        return instrumentStandNumber;
+    }
+
+    public String getProviderId() {
+        return providerId;
+    }
+
+    public String getLinkedTo() {
+        return linkedTo;
+    }
+
+    public String getInstrumentHash() {
+        return instrumentHash;
+    }
+
+    public String getPersonID() {
+        return personID;
+    }
+
+    public String getPersonType() {
+        return personType;
+    }
+
+    public String getCurrencyCodeIso() {
+        return currencyCodeIso;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getRecordHash() {
+        return recordHash;
+    }
+
+    public LocalDateTime getCreatedon() {
+        return createdon;
+    }
+
+    public LocalDateTime getUpdatedon() {
+        return updatedon;
     }
 }
 

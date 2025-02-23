@@ -1,0 +1,6 @@
+org/openfintechlab/ledgerforge/test/TransactionTest.class
+org/openfintechlab/ledgerforge/test/AccountResourceTest.class
+org/openfintechlab/ledgerforge/test/AccountResourceIT.class
+org/openfintechlab/ledgerforge/test/TransactionTestIT.class
+org/openfintechlab/ledgerforge/test/AccountEntityTest.class
+org/openfintechlab/ledgerforge/test/AccountEntityIT.class
