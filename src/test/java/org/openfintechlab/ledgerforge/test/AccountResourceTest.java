@@ -26,7 +26,6 @@ import static io.restassured.RestAssured.given;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -139,7 +138,7 @@ public class AccountResourceTest {
         .header("Authorization", "Bearer 123")
         .header("X-Message-ID", "MESSAGEID")
         .contentType("application/json")
-        .body("{\"instrumentID\":\""+_newEntityIDString+"\",\"instrunmentToken\":\"token123\",\"instrumentNumber\":\"987654321\",\"instrumentType\":\"typeA\",\"instrumentStandNumber\":\"stand123\",\"providerId\":\"provider001\",\"linkedTo\":\"linkedAccount001\",\"instrumentHash\":\"hash123\",\"personID\":\"person001\",\"personType\":\"individual\",\"currencyCodeIso\":\"USD\",\"status\":\"ACTIVE\",\"recordHash\":\"recordHash123\",\"createdon\":\"2025-02-22T10:00:00\",\"updatedon\":\"2025-02-22T10:00:00\"}")
+        .body("{\"instrumentID\":\""+_newEntityIDString+"\",\"instrunmentToken\":\"token123\",\"instrumentNumber\":\"987654321001\",\"instrumentType\":\"typeA\",\"instrumentStandNumber\":\"stand123\",\"providerId\":\"provider001\",\"linkedTo\":\"linkedAccount001\",\"instrumentHash\":\"hash123\",\"personID\":\"person001\",\"personType\":\"individual\",\"currencyCodeIso\":\"USD\",\"status\":\"ACTIVE\",\"recordHash\":\"recordHash123\",\"createdon\":\"2025-02-22T10:00:00\",\"updatedon\":\"2025-02-22T10:00:00\"}")
         .when().post("/account")
         .then()
         .statusCode(200)

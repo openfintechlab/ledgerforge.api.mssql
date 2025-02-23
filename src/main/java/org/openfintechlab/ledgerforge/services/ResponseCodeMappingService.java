@@ -54,15 +54,13 @@ public class ResponseCodeMappingService {
      * @return Map of status mapping
      */
     public Map<String, String> getStatusMapping(String key) {
-        // TODO: Add JSON schmea validation for the statusMappingJSON
         if(statusMappingRoot == null) {
             statusMappingJSONString = ConfigProvider.getConfig().getValue("appconfig.statusMappingJSON", String.class);
             ObjectMapper mapper = new ObjectMapper();
             try {                
                 statusMappingRoot = mapper.readTree(statusMappingJSONString);                                           
              } catch (JsonProcessingException e) {
-                LOGGER.error("Error while parsing statusMappingJSON", e);
-                 e.printStackTrace();
+                LOGGER.error("Error while parsing statusMappingJSON", e);                
              }
         }
 

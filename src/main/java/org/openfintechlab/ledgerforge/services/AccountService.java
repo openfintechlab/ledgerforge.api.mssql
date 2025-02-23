@@ -126,7 +126,8 @@ public class AccountService {
         Map<String, Object> response = new HashMap<>();
         Map<String, String> statusCode = null;
         AccountDTO accountDTO = new AccountDTO();
-        boolean isExist = Account.findById(account.instrumentID) != null;
+        // boolean isExist = Account.findById(account.instrumentID) != null;
+        boolean isExist = false;
         if(isExist){
             statusCode = retMap.getStatusMapping("BERR_RECORD_ALREADY_FOUND");
         }else{
