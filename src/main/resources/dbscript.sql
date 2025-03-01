@@ -79,7 +79,8 @@ CREATE TABLE LEDFOR_TRANSACTION (
 
 
 
-
+-- Non-Cluster Index
+CREATE NONCLUSTERED INDEX NCI_LEDFOR_ACCOUNT_InstNum_PersonID ON LEDFOR_ACCOUNT (instrumentNumber, personID);
 
 -- Inserting data into LEDFOR_ISOCURRENCIES table with decimal_denom
 INSERT INTO LEDFOR_ISOCURRENCIES (currency_code_iso, currency_name, decimal_denom, recordHash, createdon, updatedon)

@@ -31,11 +31,15 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
+import org.jboss.logging.Logger;
 import org.openfintechlab.ledgerforge.entities.Account;
 import org.openfintechlab.ledgerforge.entities.dto.AccountDTO;
+import org.openfintechlab.ledgerforge.resources.AccountResource;
 
 @ApplicationScoped
 public class AccountService {
+
+    private static final Logger LOGGER = Logger.getLogger(AccountResource.class);
 
     @Inject
     ResponseCodeMappingService retMap = new ResponseCodeMappingService();
@@ -126,10 +130,14 @@ public class AccountService {
         Map<String, Object> response = new HashMap<>();
         Map<String, String> statusCode = null;
         AccountDTO accountDTO = new AccountDTO();
-        boolean isExist = Account.findById(account.instrumentID) != null;        
-        if(isExist){
+        boolean isExist             = Account.findById(account.instrumentID) != null;
+        boolean personAndInstExist  = Account.find("personID = ?1 and instrumentNumber = ?2", account.personID, account.instrumentNumber).firstResult() != null;
+        
+        if(isExist || personAndInstExist){
+            LOGGER.error("Account already exist with the specified ID or personID and instrumentNumber");
             statusCode = retMap.getStatusMapping("BERR_RECORD_ALREADY_FOUND");
         }else{
+            LOGGER.info("Creating account");
             account.persist();
             if(account.isPersistent()){
                 statusCode = retMap.getStatusMapping("SUCCESS");

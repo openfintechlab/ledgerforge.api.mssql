@@ -26,6 +26,8 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -45,25 +47,39 @@ import java.time.LocalDateTime;
 public class Account extends PanacheEntityBase {
 
     @Id
-    @Column(name = "instrumentID", nullable = false)        
+    @Column(name = "instrumentID", nullable = false)   
+    @NotNull
+    @Size(min = 1, max = 64)
     public String instrumentID;
 
     @Column(name = "instrumentToken")
+    @NotNull
+    @Size(max = 255)
     public String instrumentToken;
 
     @Column(name = "instrumentNumber")
+    @NotNull
+    @Size(min =1, max = 64)
     public String instrumentNumber;
 
     @Column(name = "instrumentType")
+    @NotNull
+    @Size(min = 1, max = 128)
     public String instrumentType;
 
     @Column(name = "instrumentStandNumber")
+    @NotNull
+    @Size(min = 1, max = 128)
     public String instrumentStandNumber;
 
     @Column(name = "providerId")
+    @NotNull
+    @Size(min = 1, max = 64)
     public String providerId;
 
     @Column(name = "linkedTo")
+    @NotNull
+    @Size(min = 1, max = 64)
     public String linkedTo;
 
     @Column(name = "instrumentHash")
