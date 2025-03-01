@@ -26,12 +26,14 @@ import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.time.LocalDateTime;
@@ -57,13 +59,14 @@ public class AccountResource {
      * This method returns all the accounts defined in the ledger
      * @return List of accounts
      */
-    @GET    
-    public Response getAllAccountsDefinedInTheLedger() {
-        LOGGER.info("Getting all accounts defined in the ledger");
-        Map<String, Object> mapAccount = accountService.getAllAccounts();
-        AccountDTO accountDTO   = (AccountDTO) mapAccount.get("accountDTO");
-        Integer responseCode    = (Integer) mapAccount.get("responseCode");
-        String statusCode       =   (String) mapAccount.get("statusCode");
+    @GET
+    public Response getAllAccountsDefinedInTheLedger(@QueryParam("pageSize") @DefaultValue("10") int pageSize, 
+                                                     @QueryParam("pageNumber") @DefaultValue("1") int pageNumber) {
+        LOGGER.info("Getting all accounts defined in the ledger with pageSize: " + pageSize + " and pageNumber: " + pageNumber);
+        Map<String, Object> mapAccount = accountService.getAllAccounts(pageNumber, pageSize);
+        AccountDTO accountDTO = (AccountDTO) mapAccount.get("accountDTO");
+        Integer responseCode = (Integer) mapAccount.get("responseCode");
+        String statusCode = (String) mapAccount.get("statusCode");
 
         return Response.status(responseCode)
             .entity(accountDTO)
@@ -71,6 +74,7 @@ public class AccountResource {
             .header("X-Response-Code", statusCode)
             .build();
     }
+        
 
     /**
      * This method returns the details of a specific account

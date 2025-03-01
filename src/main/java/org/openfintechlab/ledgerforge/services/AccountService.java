@@ -48,10 +48,11 @@ public class AccountService {
      * Get all accounts from the persistence layer
      * @return Map<String, Object>: accountDTO=Account DTO Object | resposneCode= HTTP Response Code | statusCode: Business Status Code
      */
-    public Map<String, Object> getAllAccounts(){
+    public Map<String, Object> getAllAccounts(Integer pageNumber, Integer pageSize) {
         Map<String, Object> response = new HashMap<>();
         AccountDTO accountDTO = new AccountDTO();
-        List<Account> lstAccounts =  Account.listAll();
+        
+        List<Account> lstAccounts = Account.findAll().page(pageNumber, pageSize).list();        
         Map<String,String> statusCode = null;
         if(lstAccounts == null || lstAccounts.size() <= 0){                    
             statusCode = retMap.getStatusMapping("BERR_NO_RECORD_FOUND");
@@ -59,6 +60,8 @@ public class AccountService {
 
         }else{
             statusCode = retMap.getStatusMapping("SUCCESS");
+            accountDTO.setPageNumber(pageNumber);            
+            accountDTO.setTotalRecords(Account.count());
             accountDTO.setAccounts(lstAccounts);
         }        
         accountDTO.setMetadata(statusCode.get("code"), statusCode.get("EN"), null);                

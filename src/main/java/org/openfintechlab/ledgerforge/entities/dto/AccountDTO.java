@@ -38,8 +38,15 @@ public class AccountDTO {
     @JsonProperty("metadata")
     private Metadata        metadata;
 
+    @JsonProperty("pageNumber")
+    private Integer         pageNumber;
+
+    @JsonProperty("totalRecords")
+    private Long         totalRecords;
+
     @JsonProperty("accounts")
     private List<Account>   accounts;
+
 
     public Metadata getMetadata() {
         return metadata;
@@ -55,6 +62,22 @@ public class AccountDTO {
 
     public void setAccounts(List<Account> accounts) {
         this.accounts = accounts;
+    }
+
+    public Integer getPageNumber() {
+        return pageNumber;
+    }
+
+    public void setPageNumber(Integer pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+
+    public Long getTotalRecords() {
+        return totalRecords;
+    }
+
+    public void setTotalRecords(Long totalRecords) {
+        this.totalRecords = totalRecords;
     }
 
     public void setMetadata(String status, String description, LocalDateTime responseTime){
