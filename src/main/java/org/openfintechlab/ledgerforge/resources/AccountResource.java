@@ -39,6 +39,7 @@ import jakarta.ws.rs.core.Response;
 import java.time.LocalDateTime;
 import java.util.Map;
 import org.jboss.logging.Logger;
+import org.jboss.resteasy.reactive.RestResponse.Status;
 import org.openfintechlab.ledgerforge.entities.Account;
 import org.openfintechlab.ledgerforge.entities.dto.AccountDTO;
 import org.openfintechlab.ledgerforge.services.AccountService;
@@ -52,6 +53,8 @@ public class AccountResource {
     
     private static final Logger LOGGER = Logger.getLogger(AccountResource.class);
 
+    private static final Integer _CONST_MAX_RECORDS = 500;
+
     @Inject ResponseCodeMappingService  retMap          = new ResponseCodeMappingService();
     @Inject AccountService              accountService = new AccountService();
 
@@ -63,7 +66,7 @@ public class AccountResource {
     public Response getAllAccountsDefinedInTheLedger(@QueryParam("pageSize") @DefaultValue("10") int pageSize, 
                                                      @QueryParam("pageNumber") @DefaultValue("1") int pageNumber) {
         LOGGER.info("Getting all accounts defined in the ledger with pageSize: " + pageSize + " and pageNumber: " + pageNumber);
-        Map<String, Object> mapAccount = accountService.getAllAccounts(pageNumber, pageSize);
+        Map<String, Object> mapAccount = accountService.getAllAccounts(pageNumber, pageSize > _CONST_MAX_RECORDS ? _CONST_MAX_RECORDS : pageSize);
         AccountDTO accountDTO = (AccountDTO) mapAccount.get("accountDTO");
         Integer responseCode = (Integer) mapAccount.get("responseCode");
         String statusCode = (String) mapAccount.get("statusCode");
@@ -97,6 +100,43 @@ public class AccountResource {
             .build();
     }
 
+
+    @GET
+    @Path("/{accountId}/balance")
+    public Response getAccountBalance(@PathParam("accountId") String accountId) {
+        LOGGER.info("Getting account balance for account: "+accountId);
+        // Map<String, Object> mapAccount = accountService.getAccountBalance(accountId);
+        // AccountDTO accountDTO   = (AccountDTO) mapAccount.get("accountDTO");
+        // Integer responseCode    = (Integer) mapAccount.get("responseCode");
+        // String statusCode       =   (String) mapAccount.get("statusCode");
+
+        // return Response.status(responseCode)
+        //     .entity(accountDTO)
+        //     .header("X-Reply-Timestamp", LocalDateTime.now().toString())
+        //     .header("X-Response-Code", statusCode)
+        //     .build();
+
+        return Response.status(Status.METHOD_NOT_ALLOWED).build();
+    }
+
+
+    @GET
+    @Path("/person/{personId}")
+    public Response getAccountsByPersonId(@PathParam("personId") String personId, 
+                                          @QueryParam("pageSize") @DefaultValue("10") int pageSize, 
+                                          @QueryParam("pageNumber") @DefaultValue("1") int pageNumber) {
+        LOGGER.info("Getting accounts for personId: " + personId + " with pageSize: " + pageSize + " and pageNumber: " + pageNumber);
+        Map<String, Object> mapAccount = accountService.getAccountsByPersonID(personId, pageNumber, pageSize > _CONST_MAX_RECORDS ? _CONST_MAX_RECORDS : pageSize);
+        AccountDTO accountDTO   = (AccountDTO) mapAccount.get("accountDTO");
+        Integer responseCode    = (Integer) mapAccount.get("responseCode");
+        String statusCode       = (String) mapAccount.get("statusCode");
+
+        return Response.status(responseCode)
+            .entity(accountDTO)
+            .header("X-Reply-Timestamp", LocalDateTime.now().toString())
+            .header("X-Response-Code", statusCode)
+            .build();
+    }
 
     /**
      * This method returns the details of a specific account

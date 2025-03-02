@@ -60,6 +60,10 @@ public class AccountEntityTest {
             account.instrumentNumber = "123";
             account.instrumentToken = "ASDASDASDLKJLASDLAKSJD";
             account.currencyCodeIso = "AED";
+            account.providerId  =   "N/A";
+            account.linkedTo    = "N/A";
+            account.instrumentStandNumber = "N/A";
+
             account.createdon = LocalDateTime.now();
             account.updatedon = LocalDateTime.now();
 

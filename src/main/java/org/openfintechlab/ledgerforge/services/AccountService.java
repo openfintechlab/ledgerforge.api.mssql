@@ -36,6 +36,8 @@ import org.openfintechlab.ledgerforge.entities.Account;
 import org.openfintechlab.ledgerforge.entities.dto.AccountDTO;
 import org.openfintechlab.ledgerforge.resources.AccountResource;
 
+import io.quarkus.panache.common.Page;
+
 @ApplicationScoped
 public class AccountService {
 
@@ -100,7 +102,7 @@ public class AccountService {
     /**
      * Delete specific account and return the response code
      * @param id Account ID to delete from the database
-     * @return Map<String, Object>: resposneCode= HTTP Response Code | statusCode: Business Status Code
+     * @return Map<String, Object>: resposneCode= HTTP Response Code | statusCode: Business Status Code | accountDTO: Account DTO Object
      */
     @Transactional
     public Map<String, Object> deleteAccount(String id) {
@@ -198,4 +200,33 @@ public class AccountService {
         return response;
     }
 
+    /**
+     * Get Account by person ID
+     * @param personID ID of the person to fetch the account
+     * @return Map<String, Object>: resposneCode= HTTP Response Code | statusCode: Business Status Code | accountDTO: Account DTO Object
+     */
+    public Map<String, Object> getAccountsByPersonID(String personID, Integer pageNumber, Integer pageSize) {
+        Map<String, Object> response = new HashMap<>();
+        AccountDTO accountDTO = new AccountDTO();
+        // List<Account> lstAccounts = Account.find("personID = ?1", personID).page(1, 1).list();
+        // List<Account> lstAccounts = Account.find("personID = ?1", personID).page(Page.of(pageNumber, pageSize)).list();
+        List<Account> lstAccounts = Account.find("personID = ?1", personID).list();
+        
+        Map<String,String> statusCode = null;
+        if(lstAccounts == null || lstAccounts.size() <= 0){                    
+            statusCode = retMap.getStatusMapping("BERR_NO_RECORD_FOUND");
+            accountDTO.setAccounts(null);
+
+        }else{
+            statusCode = retMap.getStatusMapping("SUCCESS");
+            accountDTO.setAccounts(lstAccounts);
+        }        
+        accountDTO.setMetadata(statusCode.get("code"), statusCode.get("EN"), null);                
+        response.put("accountDTO", accountDTO);
+        response.put("responseCode", Integer.parseInt(statusCode.get("HTTP_CODE")));
+        response.put("statusCode", statusCode.get("code"));
+        return response;
+    }
+
+    
 }

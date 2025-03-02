@@ -63,6 +63,9 @@ public class AccountResourceTest {
     account.currencyCodeIso = "AED";
     account.createdon = LocalDateTime.now();
     account.updatedon = LocalDateTime.now();
+    account.providerId  =   "N/A";
+    account.linkedTo    = "N/A";
+    account.instrumentStandNumber = "N/A";
     account.persist();
     
     assertEquals(true, account.isPersistent());
@@ -122,7 +125,7 @@ public class AccountResourceTest {
         .header("Authorization", "Bearer 123")
         .header("X-Message-ID", "MESSAGEID")
         .contentType("application/json")
-        .body("{\"instrumentNumber\":\"9999999\",\"instrumentType\":\"ACCOUNT\",\"status\":\"IN-ACTIVE\"}")
+        .body("{\"instrumentNumber\":\"9999999\",\"instrumentType\":\"ACCOUNT\",\"status\":\"IN-ACTIVE\",\"providerId\":\"provider001\",\"linkedTo\":\"linkedAccount001\",\"instrumentStandNumber\":\"stand123\",\"instrumentToken\":\"N/A\",\"instrumentID\":\"N/A\"}")
         .when().put("/account/"+ _entityID)
         .then()
         .statusCode(200)
@@ -137,9 +140,8 @@ public class AccountResourceTest {
     given()
         .header("Authorization", "Bearer 123")
         .header("X-Message-ID", "MESSAGEID")
-        .contentType("application/json")
-        // .body("{\"instrumentID\":\""+_newEntityIDString+"\",\"instrunmentToken\":\"token123\",\"instrumentNumber\":\"987654321001\",\"instrumentType\":\"typeA\",\"instrumentStandNumber\":\"stand123\",\"providerId\":\"provider001\",\"linkedTo\":\"linkedAccount001\",\"instrumentHash\":\"hash123\",\"personID\":\"person001\",\"personType\":\"individual\",\"currencyCodeIso\":\"USD\",\"status\":\"ACTIVE\",\"recordHash\":\"recordHash123\",\"createdon\":\"2025-02-22T10:00:00\",\"updatedon\":\"2025-02-22T10:00:00\"}")
-        .body("{\"instrumentID\":\""+_newEntityIDString+"\",\"instrumentToken\":\"token123\",\"instrumentNumber\":\"987654321001\",\"instrumentType\":\"typeA\",\"instrumentStandNumber\":\"stand123\",\"providerId\":\"provider001\",\"linkedTo\":\"linkedAccount001\",\"instrumentHash\":\"hash123\",\"personID\":\"person001\",\"personType\":\"individual\",\"currencyCodeIso\":\"USD\",\"status\":\"ACTIVE\",\"recordHash\":\"recordHash123\",\"createdon\":\"2025-02-22T10:00:00\",\"updatedon\":\"2025-02-22T10:00:00\"}")
+        .contentType("application/json")        
+        .body("{\"instrumentID\":\""+_newEntityIDString+"\",\"instrumentToken\":\"token123\",\"instrumentNumber\":\"9876543210010199\",\"instrumentType\":\"typeA\",\"instrumentStandNumber\":\"stand123\",\"providerId\":\"provider001\",\"linkedTo\":\"linkedAccount001\",\"instrumentHash\":\"hash123\",\"personID\":\"person001-UT001\",\"personType\":\"individual\",\"currencyCodeIso\":\"USD\",\"status\":\"ACTIVE\",\"recordHash\":\"recordHash123\",\"createdon\":\"2025-02-22T10:00:00\",\"updatedon\":\"2025-02-22T10:00:00\"}")
         .when().post("/account")
         .then()
         .statusCode(200)

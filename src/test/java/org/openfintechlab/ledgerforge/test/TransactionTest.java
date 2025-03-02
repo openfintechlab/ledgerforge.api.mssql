@@ -92,6 +92,9 @@ public class TransactionTest {
             account.currencyCodeIso = "AED";
             account.createdon = LocalDateTime.now();
             account.updatedon = LocalDateTime.now();
+            account.providerId  =   "N/A";
+            account.linkedTo    = "N/A";
+            account.instrumentStandNumber = "N/A";
             account.persist();
             assertEquals(true, account.isPersistent());
 
